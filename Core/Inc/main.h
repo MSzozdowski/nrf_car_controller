@@ -57,6 +57,18 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define LEFT_RIGHT_POT_Pin GPIO_PIN_0
+#define LEFT_RIGHT_POT_GPIO_Port GPIOA
+#define BATT_VOLTAGE_Pin GPIO_PIN_1
+#define BATT_VOLTAGE_GPIO_Port GPIOA
+#define UP_DOWN_POT_Pin GPIO_PIN_4
+#define UP_DOWN_POT_GPIO_Port GPIOA
+#define CURRENT_SENSE_Pin GPIO_PIN_2
+#define CURRENT_SENSE_GPIO_Port GPIOB
+#define STATUS_LED_Pin GPIO_PIN_11
+#define STATUS_LED_GPIO_Port GPIOA
+#define STERRING_TRIM_Pin GPIO_PIN_7
+#define STERRING_TRIM_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
