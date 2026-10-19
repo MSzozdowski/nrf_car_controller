@@ -15,10 +15,8 @@ static void calcute_mean_adc_value(uint16_t* adc_vals);
 static ADC_HandleTypeDef* common_adc;
 static TIM_HandleTypeDef* dma_event_timer;
 
-static volatile uint32_t dma_tick = 0;
-
-static uint16_t adc_vals_dma[ADC_BUFFER_SIZE * 2U] = {0};
-static uint16_t adc_output[NO_OF_ADC_CHANNELS] = {0};
+static uint16_t adc_vals_dma[ADC_BUFFER_SIZE * 2U] = {0};	//*2 to update half while other is being filled with new samples
+static uint16_t adc_output[NO_OF_ADC_CHANNELS] = {0}; 		//store mean values of 10 last samples for each channel
 
 void adc_common_init(ADC_HandleTypeDef *adc, TIM_HandleTypeDef *tim)
 {
@@ -32,12 +30,11 @@ void adc_common_init(ADC_HandleTypeDef *adc, TIM_HandleTypeDef *tim)
 
     HAL_ADC_Start_DMA(common_adc, (uint32_t *)adc_vals_dma, ADC_BUFFER_SIZE * 2U);
     HAL_TIM_Base_Start(tim);
-
-    dma_tick = HAL_GetTick();
 }
 
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc)
 {
+	//update every 10 ms (1kHz timer and 10 samples)
     if(hadc == common_adc)
     {
         calcute_mean_adc_value(&adc_vals_dma[0]);
@@ -46,12 +43,10 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc)
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
+	//update every 10 ms (1kHz timer and 10 samples)
     if(hadc == common_adc)
     {
         calcute_mean_adc_value(&adc_vals_dma[ADC_BUFFER_SIZE]);
-        //HAL_GPIO_TogglePin(STATUS_LED_GPIO_Port, STATUS_LED_Pin);
-        APP_PRINT("ConvHalfCpltCallback time = %ld ms\r\n", HAL_GetTick() - dma_tick);
-        dma_tick = HAL_GetTick();
     }
 }
 
@@ -64,6 +59,15 @@ static void calcute_mean_adc_value(uint16_t* adc_vals)
         {
             sum += adc_vals[j * NO_OF_ADC_CHANNELS + i];
         }
-        adc_output[i] = (uint16_t) ((sum + NO_OF_SAMPLES_PER_CHANNEL / 2) / NO_OF_SAMPLES_PER_CHANNEL);
+        uint16_t adc_new_val = (uint16_t) ((sum + NO_OF_SAMPLES_PER_CHANNEL / 2) / NO_OF_SAMPLES_PER_CHANNEL);
+
+        if(i == ADC_CURR_SENSE_INDEX)
+        {
+        	adc_output[i] = adc_output[i] + (((adc_new_val - adc_output[i]) + 5) / 10); // to remove current fluctuations
+        }
+        else
+        {
+        	adc_output[i] = adc_new_val;
+        }
     }
 }
