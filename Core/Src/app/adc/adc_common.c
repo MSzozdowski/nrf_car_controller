@@ -32,6 +32,11 @@ void adc_common_init(ADC_HandleTypeDef *adc, TIM_HandleTypeDef *tim)
     HAL_TIM_Base_Start(tim);
 }
 
+uint16_t adc_common_get_value_from_id(adc_id_e id)
+{
+	return adc_output[id];
+}
+
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc)
 {
 	//update every 10 ms (1kHz timer and 10 samples)
