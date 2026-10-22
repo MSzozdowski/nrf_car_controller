@@ -17,7 +17,6 @@ void batt_voltage_init(batt_voltage_t *batt_voltage, adc_id_e id, uint16_t top_r
 	}
 
 	batt_voltage->id = id;
-	batt_voltage->millivolts = 0;
 	batt_voltage->r_bat_top_ohm = top_res_val_ohm;
 	batt_voltage->r_bat_bot_ohm = bot_res_val_ohm;
 	batt_voltage->numerator_multiplier = (uint32_t)(top_res_val_ohm + bot_res_val_ohm);

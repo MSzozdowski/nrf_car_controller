@@ -16,7 +16,6 @@
 typedef struct
 {
 	adc_id_e id;
-	uint16_t millivolts;
 	uint16_t r_bat_top_ohm;
 	uint16_t r_bat_bot_ohm;
 	uint32_t numerator_multiplier;

@@ -66,13 +66,14 @@ static void calcute_mean_adc_value(uint16_t* adc_vals)
         }
         uint16_t adc_new_val = (uint16_t) ((sum + NO_OF_SAMPLES_PER_CHANNEL / 2) / NO_OF_SAMPLES_PER_CHANNEL);
 
+        //remove current fluctuations
         if(i == ADC_CURR_SENSE_INDEX)
         {
-        	adc_output[i] = adc_output[i] + (((adc_new_val - adc_output[i]) + 5) / 10); // to remove current fluctuations
+        	adc_output[i] = adc_output[i] + (((adc_new_val - adc_output[i]) + 5) / 10);
         }
         else
         {
-        	adc_output[i] = adc_new_val;
+        	adc_output[i] = adc_output[i] + (((adc_new_val - adc_output[i]) + 5) / 5);
         }
     }
 }

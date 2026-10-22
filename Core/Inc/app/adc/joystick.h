@@ -17,6 +17,7 @@ typedef struct
 }joystick_t;
 
 void joystick_init(joystick_t * joystick, adc_id_e id);
-uint16_t joystick_get_value(joystick_t * joystick);
+uint16_t joystick_get_raw_value(joystick_t * joystick);
+int16_t joystick_get_percent_value(joystick_t * joystick);
 
 #endif /* INC_APP_ADC_JOYSTICK_H_ */
