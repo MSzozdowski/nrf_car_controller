@@ -7,6 +7,7 @@
 #include "ssd1306.h"
 #include "i2c.h"
 #include "app_print.h"
+#include "u8g2.h"
 
 #include <string.h>
 #include <stdbool.h>
@@ -15,7 +16,7 @@ static void ss1306_write_data(uint8_t *data, uint16_t size);
 static void ssd1306_write_command(uint8_t cmd);
 
 I2C_HandleTypeDef *ssd1306_i2c;
-static uint8_t framebuffer[SSD1306_FRAMEBUFFER_SIZE] = {0};
+//static uint8_t framebuffer[SSD1306_FRAMEBUFFER_SIZE] = {0};
 
 static volatile bool i2c_busy = false;
 static volatile uint32_t display_transmission_tick = 0;
@@ -60,10 +61,10 @@ void ssd1306_init(I2C_HandleTypeDef *hi2c)
 
     ssd1306_write_command(SSD1306_DISPLAYON);
 
-    ssd1306_clear();
+    //ssd1306_clear();
 }
 
-void ssd1306_update(void)
+void ssd1306_update(uint8_t *framebuffer)
 {
     if(i2c_busy)
     {
@@ -81,31 +82,31 @@ void ssd1306_update(void)
     ss1306_write_data(framebuffer, SSD1306_FRAMEBUFFER_SIZE);
 }
 
-void ssd1306_draw_pixel(int16_t x, int16_t y, ssd1306_color_t color)
-{
-    if((x < 0) || (x >= SSD1306_LCDWIDTH) || (y < 0) || (y >= SSD1306_LCDHEIGHT))
-        return;
+//void ssd1306_draw_pixel(int16_t x, int16_t y, ssd1306_color_t color)
+//{
+//    if((x < 0) || (x >= SSD1306_LCDWIDTH) || (y < 0) || (y >= SSD1306_LCDHEIGHT))
+//        return;
+//
+//    switch(color)
+//    {
+//    case SSD1306_WHITE:
+//        framebuffer[x + (y / 8) * SSD1306_LCDWIDTH] |= (1 << (y & 7));
+//        break;
+//
+//    case SSD1306_BLACK:
+//        framebuffer[x + (y / 8) * SSD1306_LCDWIDTH] &= ~(1 << (y & 7));
+//        break;
+//
+//    case SSD1306_INVERSE:
+//        framebuffer[x + (y / 8) * SSD1306_LCDWIDTH] ^= (1 << (y & 7));
+//        break;
+//    }
+//}
 
-    switch(color)
-    {
-    case SSD1306_WHITE:
-        framebuffer[x + (y / 8) * SSD1306_LCDWIDTH] |= (1 << (y & 7));
-        break;
-
-    case SSD1306_BLACK:
-        framebuffer[x + (y / 8) * SSD1306_LCDWIDTH] &= ~(1 << (y & 7));
-        break;
-
-    case SSD1306_INVERSE:
-        framebuffer[x + (y / 8) * SSD1306_LCDWIDTH] ^= (1 << (y & 7));
-        break;
-    }
-}
-
-void ssd1306_clear(void)
-{
-    memset(framebuffer, 0, sizeof(framebuffer));
-}
+//void ssd1306_clear(void)
+//{
+//    memset(framebuffer, 0, sizeof(framebuffer));
+//}
 
 
 static void ss1306_write_data(uint8_t *data, uint16_t size)

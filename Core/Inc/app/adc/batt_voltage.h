@@ -19,6 +19,8 @@ typedef struct
 	uint16_t millivolts;
 	uint16_t r_bat_top_ohm;
 	uint16_t r_bat_bot_ohm;
+	uint32_t numerator_multiplier;
+	uint32_t denominator_multiplier;
 }batt_voltage_t;
 
 void batt_voltage_init(batt_voltage_t *batt_voltage, adc_id_e id, uint16_t top_res_val_ohm, uint16_t bot_res_val_ohm);

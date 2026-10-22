@@ -55,8 +55,8 @@ typedef enum
 
 void ssd1306_init(I2C_HandleTypeDef * hi2c);
 void ssd1306_draw_pixel(int16_t x, int16_t y, ssd1306_color_t color);
-void ssd1306_update(void);
-void ssd1306_clear(void);
+void ssd1306_update(uint8_t *framebuffer);
+//void ssd1306_clear(void);
 
 void check_display_adress(void);
 
