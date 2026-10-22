@@ -19,6 +19,7 @@
 #include <stdio.h>
 
 #define MSG_SIZE 32U
+#define MS_100 100
 
 joystick_t joystick_acceleration;
 joystick_t joystick_direction;
@@ -26,6 +27,8 @@ batt_voltage_t batt_voltage;
 current_sense_t current_sense;
 
 u8g2_t *u8g2;
+
+uint32_t tick = 0;
 
 void app_init(void)
 {
@@ -52,28 +55,33 @@ void app_init(void)
 
 void app_loop(void)
 {
-	u8g2_ClearBuffer(u8g2);
+	if(HAL_GetTick() - tick > MS_100)
+	{
+		tick = HAL_GetTick();
 
-	char message[MSG_SIZE] = {0};
+		u8g2_ClearBuffer(u8g2);
 
-    u8g2_DrawStr(u8g2, 1, 9, "Throttle:");
-    u8g2_DrawStr(u8g2, 1, 17, "Steering:");
-    u8g2_DrawStr(u8g2, 1, 25, "Current:");
-    u8g2_DrawStr(u8g2, 1, 33, "Battery:");
+		char message[MSG_SIZE] = {0};
 
-    snprintf(message, sizeof(message), "%d | %d", joystick_get_raw_value(&joystick_acceleration), joystick_get_percent_value(&joystick_acceleration));
-    u8g2_DrawStr(u8g2, 60, 9, message);
+	    u8g2_DrawStr(u8g2, 1, 9, "Throttle:");
+	    u8g2_DrawStr(u8g2, 1, 17, "Steering:");
+	    u8g2_DrawStr(u8g2, 1, 25, "Current:");
+	    u8g2_DrawStr(u8g2, 1, 33, "Battery:");
 
-    snprintf(message, sizeof(message), "%d | %d", joystick_get_raw_value(&joystick_direction), joystick_get_percent_value(&joystick_direction));
-    u8g2_DrawStr(u8g2, 60, 17, message);
+	    snprintf(message, sizeof(message), "%d | %d", joystick_get_raw_value(&joystick_acceleration), joystick_get_percent_value(&joystick_acceleration));
+	    u8g2_DrawStr(u8g2, 60, 9, message);
 
-    snprintf(message, sizeof(message), "%d mA", current_sense_get_milliamps(&current_sense));
-    u8g2_DrawStr(u8g2, 60, 25, message);
+	    snprintf(message, sizeof(message), "%d | %d", joystick_get_raw_value(&joystick_direction), joystick_get_percent_value(&joystick_direction));
+	    u8g2_DrawStr(u8g2, 60, 17, message);
 
-    snprintf(message, sizeof(message), "%d mV", batt_get_voltage(&batt_voltage));
-    u8g2_DrawStr(u8g2, 60, 33, message);
+	    snprintf(message, sizeof(message), "%d mA", current_sense_get_milliamps(&current_sense));
+	    u8g2_DrawStr(u8g2, 60, 25, message);
 
-	ssd1306_update(u8g2_GetBufferPtr(u8g2));
-	HAL_Delay(100);
+	    snprintf(message, sizeof(message), "%d mV", batt_get_voltage(&batt_voltage));
+	    u8g2_DrawStr(u8g2, 60, 33, message);
+
+		ssd1306_update(u8g2_GetBufferPtr(u8g2));
+	}
+
 }
 

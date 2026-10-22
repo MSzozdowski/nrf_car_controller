@@ -63,6 +63,16 @@ void Error_Handler(void);
 #define BATT_VOLTAGE_GPIO_Port GPIOA
 #define UP_DOWN_POT_Pin GPIO_PIN_4
 #define UP_DOWN_POT_GPIO_Port GPIOA
+#define NRF_SCK_Pin GPIO_PIN_5
+#define NRF_SCK_GPIO_Port GPIOA
+#define NRF_MISO_Pin GPIO_PIN_6
+#define NRF_MISO_GPIO_Port GPIOA
+#define NRF_MOSI_Pin GPIO_PIN_7
+#define NRF_MOSI_GPIO_Port GPIOA
+#define NRF_CE_Pin GPIO_PIN_0
+#define NRF_CE_GPIO_Port GPIOB
+#define NRF_CSN_Pin GPIO_PIN_1
+#define NRF_CSN_GPIO_Port GPIOB
 #define CURRENT_SENSE_Pin GPIO_PIN_2
 #define CURRENT_SENSE_GPIO_Port GPIOB
 #define STATUS_LED_Pin GPIO_PIN_11
