@@ -44,6 +44,7 @@
 									<listOptionValue builtIn="false" value="../Core/Inc"/>
 									<listOptionValue builtIn="false" value="../U8g2"/>
 									<listOptionValue builtIn="false" value="../Core/Inc/app/adc"/>
+									<listOptionValue builtIn="false" value="../Core/Inc/app/radio"/>
 									<listOptionValue builtIn="false" value="../Core/Inc/app/display"/>
 									<listOptionValue builtIn="false" value="../Core/Inc/app/utils"/>
 									<listOptionValue builtIn="false" value="../Drivers/STM32G0xx_HAL_Driver/Inc"/>

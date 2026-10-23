@@ -111,7 +111,7 @@ void ssd1306_update(uint8_t *framebuffer)
 
 static void ss1306_write_data(uint8_t *data, uint16_t size)
 {
-    APP_PRINT("Display update time = %ld ms\r\n", i2c_transmit_time); //1st execution will be 0
+    //APP_PRINT("Display update time = %ld ms\r\n", i2c_transmit_time); //1st execution will be 0
 
     i2c_busy = true;
     display_transmission_tick = HAL_GetTick();

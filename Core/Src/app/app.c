@@ -15,6 +15,8 @@
 #include "ssd1306.h"
 #include "u8g2_driver.h"
 #include "u8g2.h"
+#include "nrf2401.h"
+#include "app_print.h"
 
 #include <stdio.h>
 
@@ -25,6 +27,7 @@ joystick_t joystick_acceleration;
 joystick_t joystick_direction;
 batt_voltage_t batt_voltage;
 current_sense_t current_sense;
+nrf2401_t nrf2401;
 
 u8g2_t *u8g2;
 
@@ -37,6 +40,8 @@ void app_init(void)
 	joystick_init(&joystick_acceleration, ADC_UP_DOWN_POT_INDEX);
 	batt_voltage_init(&batt_voltage, ADC_BATT_VOLTAGE_INDEX, BAT_R_TOP_OHM, BAT_R_BOTTOM_OHM);
 	current_sense_init(&current_sense, ADC_CURR_SENSE_INDEX, CURRENT_SENSE_SHUNT_MILLIOHM, CURRENT_SENSE_GAIN);
+
+	nrf2401_init(&nrf2401, &hspi1, NRF_CE_GPIO_Port, NRF_CE_Pin, NRF_CSN_GPIO_Port, NRF_CSN_Pin);
 
 	ssd1306_init(&hi2c1);
 	u8g2_driver_init();
@@ -81,6 +86,8 @@ void app_loop(void)
 	    u8g2_DrawStr(u8g2, 60, 33, message);
 
 		ssd1306_update(u8g2_GetBufferPtr(u8g2));
+
+		//APP_PRINT("Hello %d \r\n", HAL_GetTick() - tick);
 	}
 
 }
