@@ -73,7 +73,7 @@ static void calcute_mean_adc_value(uint16_t* adc_vals)
         }
         else
         {
-        	adc_output[i] = adc_output[i] + (((adc_new_val - adc_output[i]) + 5) / 5);
+        	adc_output[i] = adc_output[i] + (((adc_new_val - adc_output[i]) + 2) / 5);
         }
     }
 }

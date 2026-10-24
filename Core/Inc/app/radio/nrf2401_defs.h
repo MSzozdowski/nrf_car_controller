@@ -25,10 +25,6 @@
 #define NRF24_POWER_ON	1
 #define NRF24_POWER_OFF	0
 
-//#define NRF24_TRANSMITTER 0
-//#define NRF24_RECEIVER	1
-
-
 //
 #define NRF_START_UP_TIME 2000
 #define NRF_SETTING_TIME 200

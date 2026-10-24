@@ -75,6 +75,8 @@ void Error_Handler(void);
 #define NRF_CSN_GPIO_Port GPIOB
 #define CURRENT_SENSE_Pin GPIO_PIN_2
 #define CURRENT_SENSE_GPIO_Port GPIOB
+#define LIGHT_STATE_Pin GPIO_PIN_6
+#define LIGHT_STATE_GPIO_Port GPIOC
 #define STATUS_LED_Pin GPIO_PIN_11
 #define STATUS_LED_GPIO_Port GPIOA
 #define STERRING_TRIM_Pin GPIO_PIN_7

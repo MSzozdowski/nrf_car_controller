@@ -44,6 +44,8 @@
 									<listOptionValue builtIn="false" value="../Core/Inc"/>
 									<listOptionValue builtIn="false" value="../U8g2"/>
 									<listOptionValue builtIn="false" value="../Core/Inc/app/adc"/>
+									<listOptionValue builtIn="false" value="../Core/Inc/app/button"/>
+									<listOptionValue builtIn="false" value="../Core/Inc/app"/>
 									<listOptionValue builtIn="false" value="../Core/Inc/app/radio"/>
 									<listOptionValue builtIn="false" value="../Core/Inc/app/display"/>
 									<listOptionValue builtIn="false" value="../Core/Inc/app/utils"/>
