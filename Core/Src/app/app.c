@@ -73,8 +73,8 @@ void app_loop(void)
 	{
 		tick_display = HAL_GetTick();
 		screen_data_t screen_data;
-		screen_data.throttle_percent = joystick_get_percent_value(&joystick_acceleration);
-		screen_data.steering_percent = joystick_get_percent_value(&joystick_direction);
+		screen_data.throttle_mapped = joystick_get_mapped_value(&joystick_acceleration);
+		screen_data.steering_mapped = joystick_get_mapped_value(&joystick_direction);
 		screen_data.battery_mv = batt_get_voltage(&batt_voltage);
 		screen_data.current_ma = current_sense_get_milliamps(&current_sense);
 		screen_data.tx_per_second = 10; // to do

@@ -12,6 +12,12 @@
 #include "u8g2.h"
 #include <stdbool.h>
 
+#define SCREEN_JOYSTICK_X 22
+#define SCREEN_JOYSTICK_Y 41
+#define SCREEN_JOYSTICK_HALF_SIZE 20
+#define SCREEN_DOT_RADIUS 2
+#define SCREEN_JOYSTICK_MAX_OFFSET (SCREEN_JOYSTICK_HALF_SIZE - SCREEN_DOT_RADIUS - 1)
+
 #define MSG_SIZE 32U
 
 typedef enum
@@ -22,8 +28,8 @@ typedef enum
 
 typedef struct
 {
-    int16_t throttle_percent;
-    int16_t steering_percent;
+    int16_t throttle_mapped;
+    int16_t steering_mapped;
     uint16_t battery_mv;
     uint16_t current_ma;
     uint16_t tx_per_second;
