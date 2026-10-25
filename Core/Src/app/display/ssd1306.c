@@ -15,7 +15,7 @@
 static void ss1306_write_data(uint8_t *data, uint16_t size);
 static void ssd1306_write_command(uint8_t cmd);
 
-I2C_HandleTypeDef *ssd1306_i2c;
+static I2C_HandleTypeDef *ssd1306_i2c;
 //static uint8_t framebuffer[SSD1306_FRAMEBUFFER_SIZE] = {0};
 
 static volatile bool i2c_busy = false;
@@ -80,6 +80,11 @@ void ssd1306_update(uint8_t *framebuffer)
     ssd1306_write_command(SSD1306_LCDWIDTH - 1);
 
     ss1306_write_data(framebuffer, SSD1306_FRAMEBUFFER_SIZE);
+}
+
+bool ssd1306_is_i2c_busy(void)
+{
+	return i2c_busy;
 }
 
 //void ssd1306_draw_pixel(int16_t x, int16_t y, ssd1306_color_t color)

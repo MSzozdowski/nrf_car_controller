@@ -10,6 +10,8 @@
 
 #include "main.h"
 
+#include <stdbool.h>
+
 #define SSD1306_ADDRESS (0x3C << 1)
 #define SSD1306_CMD_TIMEOUT 100
 
@@ -57,7 +59,7 @@ void ssd1306_init(I2C_HandleTypeDef * hi2c);
 void ssd1306_draw_pixel(int16_t x, int16_t y, ssd1306_color_t color);
 void ssd1306_update(uint8_t *framebuffer);
 //void ssd1306_clear(void);
-
+bool ssd1306_is_i2c_busy(void);
 void check_display_adress(void);
 
 #endif /* INC_APP_SSD1306_H_ */

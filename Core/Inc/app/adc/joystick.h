@@ -18,6 +18,7 @@ typedef struct
 {
 	adc_id_e id;
 	uint16_t adc_value;
+	int16_t mapped_value;
 }joystick_t;
 
 void joystick_init(joystick_t * joystick, adc_id_e id);

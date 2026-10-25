@@ -10,13 +10,17 @@
 #include "tim.h"
 #include "app_print.h"
 
-static void calcute_mean_adc_value(uint16_t* adc_vals);
+#include <stdbool.h>
+
+static void calcute_mean_adc_value(volatile uint16_t* adc_vals);
 
 static ADC_HandleTypeDef* common_adc;
 static TIM_HandleTypeDef* dma_event_timer;
 
-static uint16_t adc_vals_dma[ADC_BUFFER_SIZE * 2U] = {0};	//*2 to update half while other is being filled with new samples
-static uint16_t adc_output[NO_OF_ADC_CHANNELS] = {0}; 		//store mean values of 10 last samples for each channel
+static volatile uint16_t adc_vals_dma[ADC_BUFFER_SIZE * 2U] = {0};	//*2 to update half while other is being filled with new samples
+static volatile uint16_t adc_output[NO_OF_ADC_CHANNELS] = {0}; 		//store mean values of 10 last samples for each channel
+
+static volatile bool adc_ready = false;
 
 void adc_common_init(ADC_HandleTypeDef *adc, TIM_HandleTypeDef *tim)
 {
@@ -55,7 +59,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
     }
 }
 
-static void calcute_mean_adc_value(uint16_t* adc_vals)
+static void calcute_mean_adc_value(volatile uint16_t* adc_vals)
 {
     for(uint8_t i = 0; i < NO_OF_ADC_CHANNELS; i++)
     {
@@ -67,13 +71,24 @@ static void calcute_mean_adc_value(uint16_t* adc_vals)
         uint16_t adc_new_val = (uint16_t) ((sum + NO_OF_SAMPLES_PER_CHANNEL / 2) / NO_OF_SAMPLES_PER_CHANNEL);
 
         //remove current fluctuations
-        if(i == ADC_CURR_SENSE_INDEX)
+        if(adc_ready == false)
         {
-        	adc_output[i] = adc_output[i] + (((adc_new_val - adc_output[i]) + 5) / 10);
+        	adc_output[i] = adc_new_val; // 1st samples used as filtered
+
+        }
+        else if(i == ADC_CURR_SENSE_INDEX)
+        {
+        	uint16_t rounding = ADC_CURRENT_FILTER_RATIO / 2;
+        	uint16_t ratio = ADC_CURRENT_FILTER_RATIO;
+        	adc_output[i] = (uint16_t)(((ratio - 1) * adc_output[i] + adc_new_val + rounding) / ratio);
         }
         else
         {
-        	adc_output[i] = adc_output[i] + (((adc_new_val - adc_output[i]) + 2) / 5);
+        	uint16_t rounding = ADC_FILTER_RATIO / 2;
+        	uint16_t ratio = ADC_FILTER_RATIO;
+        	adc_output[i] = (uint16_t)(((ratio - 1) * adc_output[i] + adc_new_val + rounding) / ratio);
         }
     }
+
+    adc_ready = true;
 }

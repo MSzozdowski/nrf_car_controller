@@ -19,6 +19,7 @@ void joystick_init(joystick_t *joystick, adc_id_e id)
 
 	joystick->id = id;
 	joystick->adc_value = 0;
+	joystick->mapped_value = JOYSTICK_MAPPED_CENTER;
 }
 
 uint16_t joystick_get_raw_value(joystick_t *joystick)

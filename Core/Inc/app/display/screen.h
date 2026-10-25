@@ -30,13 +30,16 @@ typedef struct
 {
     int16_t throttle_mapped;
     int16_t steering_mapped;
-    uint16_t battery_mv;
+    uint32_t battery_mv;
     uint16_t current_ma;
-    uint16_t tx_per_second;
+    uint8_t tx_per_second;
     bool lights_on;
 }screen_data_t;
 
 void screen_init(u8g2_t *p_u8g2);
 void screen_draw(screen_data_t *data);
+
+screen_type_e screen_get_current_screen(void);
+void screen_change_screen(screen_type_e new_screen);
 
 #endif /* INC_APP_DISPLAY_SCREEN_H_ */

@@ -17,6 +17,7 @@ void current_sense_init(current_sense_t *current_sense, adc_id_e id, uint16_t sh
 	current_sense->id = id;
 	current_sense->shunt_milliohms = shunt_milliohms;
 	current_sense->amplifier_gain = amp_gain;
+	current_sense->milliamps = 0;
 }
 
 uint16_t current_sense_get_milliamps(current_sense_t *current_sense)

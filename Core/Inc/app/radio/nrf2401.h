@@ -24,6 +24,7 @@ typedef enum
 typedef enum
 {
 	NRF2401_INIT,
+	NRF2401_TX_ACCEPTED,
     NRF2401_TX_OK,
     NRF2401_TX_MAX_RETRIES,
     NRF2401_TX_TIMEOUT,
@@ -50,7 +51,7 @@ typedef struct
 	nrf2401_state_e state;
 	nrf2401_tx_result_e tx_result;
 	uint32_t tick;
-
+	uint32_t succes_tx_counter;
 }nrf2401_t;
 
 void nrf2401_init(nrf2401_t *nrf2401, SPI_HandleTypeDef * spi, GPIO_TypeDef * ce_port, uint16_t ce_pin, GPIO_TypeDef * csn_port, uint16_t csn_pin);

@@ -15,6 +15,7 @@ typedef struct
 	adc_id_e id;
 	uint16_t shunt_milliohms;
 	uint16_t amplifier_gain;
+	uint16_t milliamps;
 }current_sense_t;
 
 void current_sense_init(current_sense_t *current_sense, adc_id_e id, uint16_t shunt_milliohms, uint16_t amp_gain);

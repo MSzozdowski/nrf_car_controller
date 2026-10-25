@@ -61,6 +61,7 @@ void nrf2401_init(nrf2401_t *nrf2401, SPI_HandleTypeDef * spi, GPIO_TypeDef * ce
 	nrf2401->state = NRF2401_STATE_IDLE;
 	nrf2401->tx_result = NRF2401_INIT;
 	nrf2401->tick = HAL_GetTick();
+	nrf2401->succes_tx_counter = 0;
 
 	nrf_ce_low(nrf2401); // low for stanby mode
 	nrf_csn_high(nrf2401); // data transmitting by starting csn from high to low
@@ -132,6 +133,7 @@ void nrf2401_process(nrf2401_t *nrf2401)
 		else if (status & (1U << NRF24_TX_DS))
 		{
 			nrf2401->tx_result = NRF2401_TX_OK;
+			nrf2401->succes_tx_counter++;
 		}
 		else if (HAL_GetTick() - nrf2401->tick >= NRF2401_TX_TIMEOUT_MS)
 		{
@@ -173,7 +175,7 @@ nrf2401_tx_result_e nrf2401_send(nrf2401_t *nrf2401, uint8_t *data, uint8_t leng
     nrf2401->tx_result = NRF2401_TX_BUSY;
     nrf2401->state = NRF2401_STATE_CE_HIGH;
 
-    return NRF2401_TX_BUSY;
+    return NRF2401_TX_ACCEPTED;
 }
 
 static void nrf2401_write_payload(nrf2401_t *nrf2401, uint8_t *data, uint8_t length)
