@@ -8,6 +8,7 @@
 #include "app_print.h"
 #include "usart.h"
 
+// cppcheck-suppress [unusedFunction]
 int _write(int file, char *ptr, int len)
 {
     (void)file;

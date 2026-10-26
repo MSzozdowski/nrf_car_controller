@@ -19,7 +19,7 @@
 #define ADC_RESOLUTION 4095U
 
 #define ADC_FILTER_RATIO 5
-#define ADC_CURRENT_FILTER_RATIO 10
+#define ADC_POWER_FILTER_RATIO 10
 
 typedef enum
 {

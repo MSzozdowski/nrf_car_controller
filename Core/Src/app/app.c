@@ -22,12 +22,13 @@
 #include "app_print.h"
 #include "button.h"
 #include "map.h"
+#include "watchdog.h"
 
 #include <stdio.h>
 #include <stdbool.h>
 
 static void app_update_inputs(void);
-static void app_update_power_info(void);
+static void app_update_display_power_info(void);
 static void app_update_display(void);
 static void app_update_radio(void);
 
@@ -42,6 +43,8 @@ static batt_voltage_t batt_voltage;
 static current_sense_t current_sense;
 static nrf2401_t nrf2401;
 
+static screen_data_t screen_data;
+
 static bool light_state = false;
 
 static u8g2_t *u8g2;
@@ -50,7 +53,7 @@ static uint32_t tick_display = 0;
 static uint32_t tick_message_counter = 0;
 static uint32_t tick_inputs_update = 0;
 static uint32_t tick_radio = 0;
-static uint32_t tick_power_info = 0;
+static uint32_t tick_display_power_info = 0;
 
 static uint8_t messages_with_ack = 0;
 static uint8_t accepted_messages = 0;
@@ -66,6 +69,8 @@ static uint32_t display_update_ms = 0;
 
 void app_init(void)
 {
+	watchdog_reset_info();
+
 	adc_common_init(&hadc1, &htim3);
 	joystick_init(&joystick_direction, ADC_LEFT_RIGHT_POT_INDEX);
 	joystick_init(&joystick_acceleration, ADC_UP_DOWN_POT_INDEX);
@@ -84,7 +89,7 @@ void app_init(void)
 
 	ssd1306_update(u8g2_GetBufferPtr(u8g2));
 
-	app_update_power_info(); //data should be not empty at 1st frame
+	app_update_display_power_info(); //data should be not empty at 1st frame
 }
 
 void app_loop(void)
@@ -117,10 +122,10 @@ void app_loop(void)
 	}
 
 	current_tick = HAL_GetTick();
-	if(current_tick - tick_power_info >= MS_500)
+	if(current_tick - tick_display_power_info >= MS_500)
 	{
-		tick_power_info = current_tick;
-		app_update_power_info();
+		tick_display_power_info = current_tick;
+		app_update_display_power_info();
 	}
 
 	current_tick = HAL_GetTick();
@@ -139,29 +144,30 @@ void app_loop(void)
 		fps_stats = fps;
 		fps = 0;
 	}
+
+	watchdog_refresh(&hiwdg);
 }
 
 static void app_update_inputs(void)
 {
 	joystick_acceleration.mapped_value = joystick_get_mapped_value(&joystick_acceleration);
 	joystick_direction.mapped_value = joystick_get_mapped_value(&joystick_direction);
+	batt_voltage.batt_millivolts = batt_get_voltage(&batt_voltage);
+	current_sense.milliamps = current_sense_get_milliamps(&current_sense);
 	update_light_state();
 }
 
-static void app_update_power_info(void)
+static void app_update_display_power_info(void)
 {
-	batt_voltage.batt_millivolts = batt_get_voltage(&batt_voltage);
-	current_sense.milliamps = current_sense_get_milliamps(&current_sense);
+	screen_data.battery_mv = batt_voltage.batt_millivolts;
+	screen_data.current_ma = current_sense.milliamps;
 }
 
 static void app_update_display(void)
 {
 	update_actual_screen();
-	screen_data_t screen_data;
 	screen_data.throttle_mapped = joystick_acceleration.mapped_value;
 	screen_data.steering_mapped = joystick_direction.mapped_value;
-	screen_data.battery_mv = batt_voltage.batt_millivolts;
-	screen_data.current_ma = current_sense.milliamps;
 	screen_data.tx_per_second = messages_with_ack;
 	screen_data.lights_on = light_state;
 

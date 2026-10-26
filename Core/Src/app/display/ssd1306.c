@@ -123,6 +123,7 @@ static void ss1306_write_data(uint8_t *data, uint16_t size)
     HAL_I2C_Mem_Write_DMA(ssd1306_i2c, SSD1306_ADDRESS, SSD1306_CONTROL_DATA, 1, data, size);
 }
 
+// cppcheck-suppress [unusedFunction, constParameterPointer]
 void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
     if(hi2c == ssd1306_i2c)

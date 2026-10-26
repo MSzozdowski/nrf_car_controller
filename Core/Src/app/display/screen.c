@@ -84,7 +84,8 @@ static void screen_draw_main(screen_data_t *data)
 	u8g2_DrawStr(u8g2, 1, 8, "Batt:");
 	// batt_voltage
 	uint32_t battery_cv = (data->battery_mv + 5) / 10;
-	snprintf(message, sizeof(message), "%ld.%02luV", battery_cv / 100U, battery_cv % 100U);
+	// cppcheck-suppress [invalidPrintfArgType_uint]
+	snprintf(message, sizeof(message), "%lu.%02luV", battery_cv / 100U, battery_cv % 100U);
 	u8g2_DrawStr(u8g2, 32, 8, message); //6.01V
 
 	// curr_string

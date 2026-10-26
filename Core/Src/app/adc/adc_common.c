@@ -12,7 +12,7 @@
 
 #include <stdbool.h>
 
-static void calcute_mean_adc_value(volatile uint16_t* adc_vals);
+static void calcute_mean_adc_value(const volatile uint16_t* adc_vals);
 
 static ADC_HandleTypeDef* common_adc;
 static TIM_HandleTypeDef* dma_event_timer;
@@ -41,6 +41,7 @@ uint16_t adc_common_get_value_from_id(adc_id_e id)
 	return adc_output[id];
 }
 
+// cppcheck-suppress [unusedFunction, constParameterPointer]
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc)
 {
 	//update every 10 ms (1kHz timer and 10 samples)
@@ -50,6 +51,7 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc)
     }
 }
 
+// cppcheck-suppress [unusedFunction, constParameterPointer]
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
 	//update every 10 ms (1kHz timer and 10 samples)
@@ -59,7 +61,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
     }
 }
 
-static void calcute_mean_adc_value(volatile uint16_t* adc_vals)
+static void calcute_mean_adc_value(const volatile uint16_t* adc_vals)
 {
     for(uint8_t i = 0; i < NO_OF_ADC_CHANNELS; i++)
     {
@@ -76,10 +78,10 @@ static void calcute_mean_adc_value(volatile uint16_t* adc_vals)
         	adc_output[i] = adc_new_val; // 1st samples used as filtered
 
         }
-        else if(i == ADC_CURR_SENSE_INDEX)
+        else if(i == ADC_CURR_SENSE_INDEX || i == ADC_BATT_VOLTAGE_INDEX)
         {
-        	uint16_t rounding = ADC_CURRENT_FILTER_RATIO / 2;
-        	uint16_t ratio = ADC_CURRENT_FILTER_RATIO;
+        	uint16_t rounding = ADC_POWER_FILTER_RATIO / 2;
+        	uint16_t ratio = ADC_POWER_FILTER_RATIO;
         	adc_output[i] = (uint16_t)(((ratio - 1) * adc_output[i] + adc_new_val + rounding) / ratio);
         }
         else
