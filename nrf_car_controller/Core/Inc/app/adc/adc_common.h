@@ -11,6 +11,8 @@
 #include "adc.h"
 #include "tim.h"
 
+#include <stdbool.h>
+
 #define NO_OF_ADC_CHANNELS 5U
 #define NO_OF_SAMPLES_PER_CHANNEL 10U
 #define ADC_BUFFER_SIZE (NO_OF_ADC_CHANNELS * NO_OF_SAMPLES_PER_CHANNEL)
@@ -32,5 +34,6 @@ typedef enum
 
 void adc_common_init(ADC_HandleTypeDef *adc, TIM_HandleTypeDef *tim);
 uint16_t adc_common_get_value_from_id(adc_id_e id);
+bool adc_common_ready(void);
 
 #endif /* INC_APP_ADC_COMMON_H_ */

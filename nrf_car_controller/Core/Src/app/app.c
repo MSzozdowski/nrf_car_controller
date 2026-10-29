@@ -35,6 +35,8 @@ static void app_update_radio(void);
 static void update_light_state(void);
 static void update_actual_screen(void);
 
+static void app_wait_adc_common_ready(void);
+
 static button_t lights_button;
 static button_t change_page_button;
 static joystick_t joystick_acceleration;
@@ -89,7 +91,9 @@ void app_init(void)
 
 	ssd1306_update(u8g2_GetBufferPtr(u8g2));
 
-	app_update_display_power_info(); //data should be not empty at 1st frame
+	app_wait_adc_common_ready();
+	app_update_inputs();
+	app_update_display_power_info();
 }
 
 void app_loop(void)
@@ -214,4 +218,9 @@ static void update_actual_screen(void)
 			screen_change_screen(SCREEN_MAIN);
 		}
 	}
+}
+
+static void app_wait_adc_common_ready(void)
+{
+	while(!adc_common_ready());
 }

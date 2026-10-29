@@ -41,6 +41,11 @@ uint16_t adc_common_get_value_from_id(adc_id_e id)
 	return adc_output[id];
 }
 
+bool adc_common_ready(void)
+{
+	return adc_ready;
+}
+
 // cppcheck-suppress [unusedFunction, constParameterPointer]
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc)
 {
